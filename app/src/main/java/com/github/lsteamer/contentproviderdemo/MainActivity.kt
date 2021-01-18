@@ -1,5 +1,6 @@
 package com.github.lsteamer.contentproviderdemo
 
+import android.database.Cursor
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    var rs: Cursor? = null
 
     val PROVIDER_NAME = "com.github.lsteamer.contentproviderdemo/AcronymProvider"
     val URL = "content://$PROVIDER_NAME/ACTABLE"
@@ -23,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var rs = contentResolver.query(CONTENT_URI, arrayOf(_ID, NAME, MEANING),null, null, null )
+        rs = contentResolver.query(CONTENT_URI, arrayOf(_ID, NAME, MEANING),null, null, null )
 
         button.setOnClickListener {
             rs?.let {
@@ -32,6 +34,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         rs?.close()
     }
+
 }
